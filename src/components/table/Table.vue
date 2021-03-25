@@ -213,8 +213,8 @@
                             }]"
                             @click="selectRow(row)"
                             @dblclick="$emit('dblclick', row)"
-                            @mouseenter="$listeners.mouseenter ? $emit('mouseenter', row) : null"
-                            @mouseleave="$listeners.mouseleave ? $emit('mouseleave', row) : null"
+                            @mouseenter="emitEventForRow('mouseenter', $event, row)"
+                            @mouseleave="emitEventForRow('mouseleave', $event, row)"
                             @contextmenu="$emit('contextmenu', row, $event)"
                             :draggable="draggable"
                             @dragstart="handleDragStart($event, row, index)"
@@ -295,13 +295,13 @@
                                     </div>
                                 </td>
                             </tr>
-                            <slot
-                                v-if="isActiveCustomDetailRow(row)"
-                                name="detail"
-                                :row="row"
-                                :index="index"
-                            />
                         </transition>
+                        <slot
+                            v-if="isActiveCustomDetailRow(row)"
+                            name="detail"
+                            :row="row"
+                            :index="index"
+                        />
                     </template>
 
                     <tr
@@ -1313,6 +1313,10 @@ export default {
         handleDragLeave(event, row, index) {
             if (!this.draggable) return
             this.$emit('dragleave', {event, row, index})
+        },
+
+        emitEventForRow(eventName, event, row) {
+            return this.$listeners[eventName] ? this.$emit(eventName, row, event) : null
         },
 
         refreshSlots() {
