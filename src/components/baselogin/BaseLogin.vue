@@ -5,10 +5,11 @@
                 <div class="login-element">
                     <template v-if="loginOptions.isAliasEmail">
                         <div class="label-container">
-                            <label for="usera"
-                                ><b>{{
-                                    loginOptions.emailField.label
-                                }}</b></label
+                            <label
+                                for="usera"
+                            ><b>{{
+                                loginOptions.emailField.label
+                            }}</b></label
                             >
                         </div>
                         <div class="input-container">
@@ -18,7 +19,7 @@
                                     loginOptions.emailField.icon,
                                     'login-icon'
                                 ]"
-                            ></span>
+                            />
                             <input
                                 ref="alias"
                                 v-model="userAlias"
@@ -28,15 +29,16 @@
                                 "
                                 name="usera"
                                 required
-                            />
+                            >
                         </div>
                     </template>
                     <template v-else>
                         <div class="label-container">
-                            <label for="usera"
-                                ><b>{{
-                                    loginOptions.nameField.label
-                                }}</b></label
+                            <label
+                                for="usera"
+                            ><b>{{
+                                loginOptions.nameField.label
+                            }}</b></label
                             >
                         </div>
                         <div class="input-container">
@@ -46,7 +48,7 @@
                                     loginOptions.nameField.icon,
                                     'login-icon'
                                 ]"
-                            ></i>
+                            />
                             <input
                                 v-model="userAlias"
                                 type="text"
@@ -55,14 +57,15 @@
                                 "
                                 name="usera"
                                 required
-                            />
+                            >
                         </div>
                     </template>
                 </div>
                 <div class="login-element">
                     <div class="label-container">
-                        <label for="psw"
-                            ><b>{{ loginOptions.passField.label }}</b></label
+                        <label
+                            for="psw"
+                        ><b>{{ loginOptions.passField.label }}</b></label
                         >
                     </div>
                     <div class="input-container">
@@ -72,14 +75,14 @@
                                 loginOptions.passField.icon,
                                 'login-icon'
                             ]"
-                        ></i>
+                        />
                         <input
                             v-model="userPass"
                             type="password"
                             :placeholder="loginOptions.passField.placeholder"
                             name="psw"
                             required
-                        />
+                        >
                     </div>
                 </div>
                 <div v-if="displayError" class="login-element">
@@ -107,15 +110,15 @@
             :custom-options="loginOptions.logicConfig"
             @logic-success="onLogicSuccess"
             @logic-error="onLogicError"
-            >/</logic
+        >/</logic
         >
     </div>
 </template>
 <script>
-import _merge from "lodash/merge";
-import BaseLoginLogic from "./BaseLoginLogic";
+import _merge from 'lodash/merge'
+import BaseLoginLogic from './BaseLoginLogic'
 export default {
-    name: "BaseLogin",
+    name: 'BaseLogin',
     components: {
         [BaseLoginLogic.name]: BaseLoginLogic
     },
@@ -124,7 +127,7 @@ export default {
             type: Object,
             required: false,
             default: () => {
-                return {};
+                return {}
             }
         }
     },
@@ -135,54 +138,51 @@ export default {
                 useLogic: false,
                 logicConfig: {},
                 displayErrorMsg: true,
-                iconLibrary: "mdi",
+                iconLibrary: 'mdi',
                 ButtonStyle: {
-                    fontColor: "white",
-                    color: "#4caf50"
+                    fontColor: 'white',
+                    color: '#4caf50'
                 },
                 emailField: {
-                    icon: "mdi-email",
-                    label: "Email",
-                    placeholder: "Enter Email"
+                    icon: 'mdi-email',
+                    label: 'Email',
+                    placeholder: 'Enter Email'
                 },
                 nameField: {
-                    icon: "mdi-account",
-                    label: "Username",
-                    placeholder: "Enter Username"
+                    icon: 'mdi-account',
+                    label: 'Username',
+                    placeholder: 'Enter Username'
                 },
                 passField: {
-                    icon: "mdi-lock-question",
-                    label: "Password",
-                    placeholder: "Enter Password"
+                    icon: 'mdi-lock-question',
+                    label: 'Password',
+                    placeholder: 'Enter Password'
                 }
             },
-            userAlias: "",
-            userPass: "",
+            userAlias: '',
+            userPass: '',
             launchLogin: false,
             isLoginReady: false,
             errorMsg: null
-        };
+        }
     },
     computed: {
         displayError() {
-            return this.loginOptions.displayErrorMsg && !!this.errorMsg;
+            return this.loginOptions.displayErrorMsg && !!this.errorMsg
         },
         cssVars() {
             return {
-                "--buttonFontColor": `${
+                '--buttonFontColor': `${
                     this.loginOptions.ButtonStyle.fontColor
                 }`,
-                "--buttonColor": `${this.loginOptions.ButtonStyle.color}`
-            };
+                '--buttonColor': `${this.loginOptions.ButtonStyle.color}`
+            }
         }
     },
     watch: {
         launchLogin: {
-            handler: "loginEmit"
+            handler: 'loginEmit'
         }
-    },
-    mounted() {
-        this.init();
     },
     methods: {
         init() {
@@ -190,59 +190,63 @@ export default {
                 this.loginOptions = _merge(
                     this.loginOptions,
                     this.customOptions
-                );
+                )
             }
-            this.isLoginReady = true;
-            this.autofocusInput();
+            this.isLoginReady = true
+            this.autofocusInput()
         },
         mergeOptions(target, source) {
-            ///TODO: Base Component: replace this method for dependency lodash.merge?
+            /// TODO: Base Component: replace this method for dependency lodash.merge?
             // Iterate through `source` properties and if an `Object` set property to merge of `target` and `source` properties
             for (const key of Object.keys(source)) {
-                if (source[key] instanceof Object && key in target)
+                if (source[key] instanceof Object && key in target) {
                     Object.assign(
                         source[key],
                         this.mergeOptions(target[key], source[key])
-                    );
+                    )
+                }
             }
             // Join `target` and modified `source`
-            Object.assign(target || {}, source);
-            return target;
+            Object.assign(target || {}, source)
+            return target
         },
         autofocusInput() {
             this.$nextTick(() => {
-                this.$refs.alias.focus();
-            });
+                this.$refs.alias.focus()
+            })
         },
         loginAction() {
-            this.launchLogin = true;
-            this.errorMsg = null;
+            this.launchLogin = true
+            this.errorMsg = null
         },
         loginEmit(isBusy) {
-            this.$emit("login-state-change", isBusy);
-            if (!isBusy) return;
-            if (this.loginOptions.useLogic) return;
+            this.$emit('login-state-change', isBusy)
+            if (!isBusy) return
+            if (this.loginOptions.useLogic) return
             this.onLogicSuccess({
                 user: this.userAlias,
                 pass: this.userPass
-            });
+            })
         },
         onSubmitForm(e) {
-            e.preventDefault();
-            this.loginAction();
+            e.preventDefault()
+            this.loginAction()
         },
         onLogicSuccess(data) {
-            this.errorMsg = null;
-            this.launchLogin = false;
-            this.$emit("login-action", data);
+            this.errorMsg = null
+            this.launchLogin = false
+            this.$emit('login-action', data)
         },
         onLogicError(err) {
-            this.errorMsg = err.msg;
-            this.launchLogin = false;
-            this.$emit("login-error", err);
+            this.errorMsg = err.msg
+            this.launchLogin = false
+            this.$emit('login-error', err)
         }
+    },
+    mounted() {
+        this.init()
     }
-};
+}
 </script>
 <style lang="scss" scoped>
 .login-container {
